@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour {
 
     public virtual void FixedUpdate()
     {
-        Vector2 velocity = new Vector2(-body.velocity.x * 110, 0);
+        Vector2 velocity = new Vector2(-body.velocity.x * 130f, 0);
         body.AddForce(velocity, ForceMode2D.Force);
     }
 	
@@ -33,10 +33,11 @@ public class Movement : MonoBehaviour {
         float newSpeed;
 
         newSpeed = speed - body.velocity.x;
-        newSpeed = Mathf.Max(0, newSpeed);
+        newSpeed = Mathf.Abs(newSpeed);
 
         Vector2 velocity = new Vector2(newSpeed*direction, body.velocity.y);
         body.AddForce(velocity,ForceMode2D.Force);
+
     }
     
     public void Jump(float jumpHeight)
@@ -59,7 +60,14 @@ public class Movement : MonoBehaviour {
             else
             {
                 grounded = false;
-                if (Physics2D.Raycast(transform.position, -transform.up, 10f, layers)) { nearEdge = true; }
+                if (Physics2D.Raycast(transform.position, -transform.up, 10f, layers))
+                {
+                    nearEdge = true;
+                }
+                else
+                {
+                    nearEdge = false;
+                }
             }
 
             if (grounded) 
@@ -67,13 +75,16 @@ public class Movement : MonoBehaviour {
                 jumping = false;
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
     public void LookDirection(Vector3 direction)
     {
-        transform.rotation = Quaternion.LookRotation(direction, transform.up);
+        transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        Debug.Log(direction + "");
+
     }
 
     void OnDrawGizmosSelected()

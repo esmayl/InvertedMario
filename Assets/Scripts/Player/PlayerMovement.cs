@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class PlayerMovement : Movement
 {
-    float speed = 600f;
-    float newSpeed;
+    public bool useMobileInput = false;
+    MobileInput mobileInput;
+    float speed = 700f;
+    float newSpeed = 800f;
     float jumpHeight = 220f;
     float counter = 0;
-    float cooldown = 0.65f;
+    float cooldown = 0.55f;
     Vector3 spherePos;
 
     PlayerStats playerStatsRefference;
@@ -18,25 +21,17 @@ public class PlayerMovement : Movement
 
         StartCoroutine("GroundCheck");
         counter = cooldown;
-    }
 
-    void Update()
-    {
-        if (counter >= cooldown)
+        if (useMobileInput)
         {
-            if (Input.GetKeyDown(KeyCode.Space) && grounded && !jumping)
+            try
             {
-                playerStatsRefference.animator.SetTrigger("Jump");
-                playerStatsRefference.PlayAudio(playerStatsRefference.sourceNames[1],playerStatsRefference.jumpClip);
-                Jump(jumpHeight);
-                jumping = true;
-                grounded = false;
-                counter = 0;
+                mobileInput = GetComponent<MobileInput>();
             }
-        }
-        else
-        {
-            counter += Time.deltaTime;
+            catch (Exception e)
+            {
+                mobileInput = gameObject.AddComponent<MobileInput>();
+            }
         }
     }
 
@@ -44,15 +39,75 @@ public class PlayerMovement : Movement
     {
         base.FixedUpdate();
 
+        if (useMobileInput)
+        {
+            return;
+        }
+
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
-            Move(speed,1f);
+            Move(speed, 1f);
         }
 
 
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
-            Move(speed,-1f);
+            Move(speed, -1f);
+        }
+
+        
+    }
+
+    public void Update()
+    {
+
+        counter += Time.deltaTime;
+
+        if (mobileInput&& Input.touches.Length> 0)
+        {
+            foreach (Touch touch in Input.touches)
+            {
+                switch (mobileInput.CheckTouch(touch))
+                {
+                    case ActionType.MoveL:
+                        Move(speed, -1f);
+                        break;
+
+                    case ActionType.MoveR:
+                        Move(speed, 1f);
+                        break;
+                    
+                    case ActionType.Jump:
+                        if (counter >= cooldown && grounded && !jumping)
+                        {
+                            Jump(jumpHeight);
+
+                            playerStatsRefference.animator.SetTrigger("Jump");
+                            playerStatsRefference.PlayAudio(playerStatsRefference.sourceNames[1], playerStatsRefference.jumpClip);
+                            Jump(jumpHeight);
+                            jumping = true;
+                            grounded = false;
+                            counter = 0;
+                        }
+                        break;
+                    
+                }
+            }
+            return;
+        }
+
+
+        if (counter >= cooldown)
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && grounded && !jumping)
+            {
+                playerStatsRefference.animator.SetTrigger("Jump");
+                playerStatsRefference.PlayAudio(playerStatsRefference.sourceNames[1], playerStatsRefference.jumpClip);
+                Jump(jumpHeight);
+                jumping = true;
+                grounded = false;
+                counter = 0;
+            }
         }
     }
 

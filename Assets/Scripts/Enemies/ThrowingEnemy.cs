@@ -11,11 +11,11 @@ public class ThrowingEnemy : Movement
     Transform player;
     EnemyStats statsRefference;
     float detectionRange = 6f;
+    float closestRange = 1f;
     float speed = 600f;
-    float closestRange = 0.5f;
     float walkDirection = -1f;
     float throwCounter = 0;
-    float throwStrenght = 40f;
+    float throwStrength = 40f;
 
 	void Start ()
 	{
@@ -26,11 +26,12 @@ public class ThrowingEnemy : Movement
 	    StartCoroutine("FindPlayer");
     }
 	
-	public override void FixedUpdate () 
+	public override void FixedUpdate() 
     {
-	    base.FixedUpdate();
+        base.FixedUpdate();
 
 	    throwCounter -= Time.fixedDeltaTime;
+
 
 	    switch (currentState)
 	    {
@@ -67,7 +68,7 @@ public class ThrowingEnemy : Movement
 
             GameObject ga = (GameObject)Instantiate(BombGameObject, instancePos, Quaternion.identity);
 
-            ga.GetComponent<Rigidbody2D>().AddForce((HandTransform.forward + HandTransform.up).normalized*throwStrenght, ForceMode2D.Impulse);
+            ga.GetComponent<Rigidbody2D>().AddForce((HandTransform.forward + HandTransform.up).normalized*throwStrength, ForceMode2D.Impulse);
 
             ga.GetComponent<BombProjectile>().damage = statsRefference.enemyDamage;
                 
@@ -99,10 +100,11 @@ public class ThrowingEnemy : Movement
             {
                 Vector3 dir = player.position - transform.position;
                 dir.y = 0;
+                dir.z = 0;
 
                 if (dir.magnitude > closestRange)
                 {
-                    LookDirection(dir);
+                    LookDirection(dir.normalized);
                 }
 
 
@@ -118,19 +120,20 @@ public class ThrowingEnemy : Movement
 
             //Keep here for checking loops, going to be important with lots of enemies 
             //Debug.Log("Enemy "+transform.name+" Loop");
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
     void Patrol()
     {
+        if (grounded && !nearEdge) { Move(speed, walkDirection); }
+
         if (nearEdge)
         {
             LookDirection(-transform.forward);
             nearEdge = false;
             walkDirection *= -1f;
         }
-        if (grounded) { Move(speed, walkDirection); }
     }
 
     void PlayAudio(AudioClip audioClip)

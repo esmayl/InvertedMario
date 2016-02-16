@@ -35,9 +35,12 @@ public class MovingPlatform : MonoBehaviour
     }
 
 
-	void Update () 
+	void FixedUpdate () 
     {
-	    platform.position = Vector3.MoveTowards(platform.position,nextWaypoint.position,moveSpeed*Time.deltaTime);
+
+
+
+	    platform.position = Vector3.MoveTowards(platform.position,nextWaypoint.position,moveSpeed*Time.fixedDeltaTime/10f);
 
         if (Vector3.Distance(platform.position, nextWaypoint.position) < 0.4f)
         {

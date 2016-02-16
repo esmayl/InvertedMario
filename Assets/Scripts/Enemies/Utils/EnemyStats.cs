@@ -17,6 +17,7 @@ public class EnemyStats : MonoBehaviour
     public void Death()
     {
         animator.SetTrigger("Hit");
+        GetComponentInChildren<Collider2D>().enabled = false;
         Destroy(gameObject,0.25f);
         SendMessage("PlayAudio",deathClip);
     }

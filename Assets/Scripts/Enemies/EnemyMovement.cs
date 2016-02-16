@@ -33,7 +33,7 @@ public class EnemyMovement : Movement
 	    StartCoroutine("FindPlayer");
     }
 
-	public override void FixedUpdate ()
+	public override void FixedUpdate()
 	{
 	    base.FixedUpdate();
 
