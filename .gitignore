@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /Library/*
+=======
+/[Ll]ibrary/
+>>>>>>> 974e11d10bed2f7b47a7ee79f6d9a9267cfcf684
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
@@ -24,7 +28,10 @@ ExportedObj/
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
+<<<<<<< HEAD
 
 # Builds
 *.apk
 *.unitypackage
+=======
+>>>>>>> 974e11d10bed2f7b47a7ee79f6d9a9267cfcf684
