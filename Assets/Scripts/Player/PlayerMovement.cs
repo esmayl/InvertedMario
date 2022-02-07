@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : Movement
 {
@@ -15,7 +16,7 @@ public class PlayerMovement : Movement
 
     PlayerStats playerStatsRefference;
 
-    void Start()
+    void OnEnable()
     {
         playerStatsRefference = GetComponent<PlayerStats>();
 
@@ -63,7 +64,7 @@ public class PlayerMovement : Movement
 
         counter += Time.deltaTime;
 
-        if (mobileInput&& Input.touches.Length> 0)
+        if (mobileInput && Input.touches.Length> 0)
         {
             foreach (Touch touch in Input.touches)
             {
@@ -122,5 +123,22 @@ public class PlayerMovement : Movement
     void OnCollisionExit2D(Collision2D col)
     {
         transform.parent = null;
+    }
+
+
+    public void Die()
+    {
+        Invoke("Respawn", 0.5f);
+        gameObject.SetActive(false);
+    }
+
+    void Respawn()
+    {
+        LevelManager.instance.ReloadLevel();
+    }
+
+    void OnDisable()
+    {
+        StopCoroutine("GroundCheck");
     }
 }

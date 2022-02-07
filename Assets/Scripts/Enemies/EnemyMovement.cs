@@ -12,6 +12,7 @@ enum EnemyState
 public class EnemyMovement : Movement
 {
     public string audioSourceName;
+    [HideInInspector]
     public EnemyStats statsReff;
 
     EnemyState currentState = EnemyState.Patrolling;
@@ -59,9 +60,10 @@ public class EnemyMovement : Movement
         gizmoColor.a = 0.4f;
         Gizmos.color = gizmoColor;
         Gizmos.DrawSphere(transform.position, detectionRange);
+        Gizmos.DrawRay(body.position, new Vector2(walkDirection*5, 0));
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         GetComponent<EnemyStats>().AddScoreToPlayer();
     }
@@ -70,6 +72,18 @@ public class EnemyMovement : Movement
     {
         while(true)
         {
+            int tempLayer = LayerMask.GetMask("InvisWall");
+            RaycastHit2D wallHit = Physics2D.Raycast(body.position, new Vector2(walkDirection, body.position.y), 5, tempLayer);
+
+
+            if (wallHit)
+            {
+                nearEdge = true;
+                //Debug.Log(LayerMask.LayerToName(wallHit.transform.gameObject.layer));
+
+                yield return new WaitForSeconds(0.1f);
+            }
+
             Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, detectionRange);
 
             if (hits.Length > 0 && player == null)
@@ -83,6 +97,7 @@ public class EnemyMovement : Movement
                     }
                 }
             }
+
 
             if (player)
             {
@@ -132,6 +147,7 @@ public class EnemyMovement : Movement
             nearEdge = false; 
             walkDirection *= -1f;
         }
+
         if (grounded)
         {
             Move(speed, walkDirection);

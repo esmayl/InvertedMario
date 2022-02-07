@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerWeakspot : MonoBehaviour {
-
+public class PlayerWeakspot : MonoBehaviour 
+{
     public void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("Enemy"))

@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour
 
     float height = 0;
 
-	void FixedUpdate()
+	void Update()
 	{
 	    if (CompareHeight(player.transform))
 	    {
@@ -34,7 +34,7 @@ public class FollowPlayer : MonoBehaviour
         }
         if (diff.y<2)
         {
-            height = Mathf.Lerp(height,player.transform.position.y,Time.deltaTime*10);
+            height = Mathf.Lerp(height,player.transform.position.y,Time.deltaTime * 10);
             return true;
         }
         if (height < 1)

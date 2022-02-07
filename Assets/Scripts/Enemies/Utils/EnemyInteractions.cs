@@ -8,8 +8,6 @@ public class EnemyInteractions : MonoBehaviour
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("enemy " + transform.parent.name + " died");
-                                    
             SendMessageUpwards("Death");
 
             col.gameObject.SendMessageUpwards("Jump",200f);

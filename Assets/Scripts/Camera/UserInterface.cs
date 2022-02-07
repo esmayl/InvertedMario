@@ -2,27 +2,50 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class UserInterface : MonoBehaviour {
-
+public class UserInterface : MonoBehaviour 
+{
+    public static UserInterface instance;
+    public Transform gameEndScreen;
     public Text scoreText;
     public Image hpBar;
-    static int score;
-    static int hp;
+    int score;
+    int hp;
+    bool endReached = false;
 
-	void Update () 
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Update () 
     {
         scoreText.text = ""+score;
         
-        hpBar.fillAmount = (float)hp / 100;
-	}
+        hpBar.transform.localScale = new Vector3((float)hp / 100,1,1);
 
-    public static void SetScore(int newScore)
+        if (endReached)
+        {
+            ShowEndLevel();
+        }
+    }
+
+    public void SetScore(int newScore)
     {
         score = newScore;
     }
 
-    public static void SetHp(int newHP)
+    public void SetHp(int newHP)
     {
         hp = newHP;
+    }
+
+    public void SetEndReached()
+    {
+        endReached = true;
+    }
+
+    public void ShowEndLevel()
+    {
+        gameEndScreen.gameObject.SetActive(true);
     }
 }

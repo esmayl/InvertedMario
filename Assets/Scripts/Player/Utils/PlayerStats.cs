@@ -11,6 +11,7 @@ public class PlayerStats : MonoBehaviour
     public string[] sourceNames;
 
     int hp = 100;
+    int currentHp = 0;
     float lastHitTime = 0;
     float hitTimer = 0.5f;
 
@@ -20,18 +21,23 @@ public class PlayerStats : MonoBehaviour
         set
         {
             _playerScore = value;
-            UserInterface.SetScore(_playerScore);
+            UserInterface.instance.SetScore(_playerScore);
         }
     }
 
     //internal representation
     static int _playerScore;
 
+    void OnEnable()
+    {
+        currentHp = hp;
+    }
+
 
     public void Update()
     {
         animator.SetFloat("Speed", Input.GetAxisRaw("Horizontal"));
-        UserInterface.SetHp(hp);
+        UserInterface.instance.SetHp(currentHp);
         lastHitTime += Time.deltaTime;
     }
 
@@ -52,29 +58,30 @@ public class PlayerStats : MonoBehaviour
 
     public void AddHp(int hpToAdd)
     {
-        hp += hpToAdd;
-        UserInterface.SetHp(hp);
+        currentHp += hpToAdd;
+        UserInterface.instance.SetHp(currentHp);
     }
 
     public void RemoveHp(int hpToRemove)
     {
         if (lastHitTime < hitTimer) { return; }
-        if (hp > 0)
+        if (currentHp > 0)
         {
-            hp -= hpToRemove;
+            currentHp -= hpToRemove;
             
             animator.SetTrigger("Hit");
 
             lastHitTime = 0;
-            UserInterface.SetHp(hp);
+            UserInterface.instance.SetHp(currentHp);
             PlayAudio(sourceNames[0],hitClip);
         }
-        if (hp <= 0)
+        if (currentHp <= 0)
         {
-            UserInterface.SetHp(hp);
+            UserInterface.instance.SetHp(currentHp);
             animator.SetTrigger("Hit");
 
             PlayDeathAudio();
+            GetComponent<PlayerMovement>().Die();
         }
     }
 

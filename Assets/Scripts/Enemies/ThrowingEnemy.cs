@@ -12,17 +12,18 @@ public class ThrowingEnemy : Movement
     EnemyStats statsRefference;
     float detectionRange = 6f;
     float closestRange = 1f;
-    float speed = 600f;
+    float speed = 1.6f;
     float walkDirection = -1f;
     float throwCounter = 0;
     float throwStrength = 40f;
 
-	void Start ()
+	void OnEnable ()
 	{
 	    statsRefference = GetComponent<EnemyStats>();
 
         currentState = EnemyState.Patrolling;
-	    StartCoroutine("GroundCheck");
+
+        StartCoroutine("GroundCheck");
 	    StartCoroutine("FindPlayer");
     }
 	
@@ -52,7 +53,7 @@ public class ThrowingEnemy : Movement
         Gizmos.DrawSphere(transform.position, detectionRange);
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         GetComponent<EnemyStats>().AddScoreToPlayer();
     }
@@ -126,7 +127,10 @@ public class ThrowingEnemy : Movement
 
     void Patrol()
     {
-        if (grounded && !nearEdge) { Move(speed, walkDirection); }
+        if (grounded && !nearEdge) 
+        {
+            Move(speed, walkDirection);
+        }
 
         if (nearEdge)
         {

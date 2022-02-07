@@ -8,6 +8,11 @@ public class EnemyStats : MonoBehaviour
     public AudioClip jumpClip;
     public AudioClip deathClip;
     public Animator animator;
+    
+    void OnDisable()
+    {
+        animator.Rebind();
+    }
 
     public void AddScoreToPlayer()
     {
@@ -17,8 +22,12 @@ public class EnemyStats : MonoBehaviour
     public void Death()
     {
         animator.SetTrigger("Hit");
-        GetComponentInChildren<Collider2D>().enabled = false;
-        Destroy(gameObject,0.25f);
+        Invoke("Disable",0.25f);
         SendMessage("PlayAudio",deathClip);
+    }
+
+    void Disable()
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -11,7 +11,7 @@ public class AudioMixClass : MonoBehaviour
 
     List<GameObject> sources = new List<GameObject>();
 
-	void Start ()
+	void Awake ()
 	{
 	    mixReff = this;
 
@@ -32,5 +32,19 @@ public class AudioMixClass : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void SwitchSound(bool newState)
+    {
+        if (newState)
+        {
+            mixer.ClearFloat("MainVolume");
+        }
+        else
+        {
+            mixer.SetFloat("MainVolume", -80);
+        }
+
+        Debug.Log(newState);
     }
 }
