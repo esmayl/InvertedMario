@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -38,15 +39,16 @@ public class LevelManager : MonoBehaviour
 
     public void ReloadLevel()
     {
-        int i = 0;
-        foreach (GameObject enemy in enemies)
-        {
-            enemy.transform.position = enemySpawnPoints[i];
-            enemy.SetActive(true);
-            i++;
-        }
+        //int i = 0;
+        //foreach (GameObject enemy in enemies)
+        //{
+        //    enemy.transform.position = enemySpawnPoints[i];
+        //    enemy.SetActive(true);
+        //    i++;
+        //}
 
-        player.transform.position = playerSpawnPoint;
-        player.SetActive(true);
+        //player.transform.position = playerSpawnPoint;
+        //player.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

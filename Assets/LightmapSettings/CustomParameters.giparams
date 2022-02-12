@@ -3,15 +3,16 @@
 --- !u!1113 &111300000
 LightmapParameters:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: CustomParameters
   serializedVersion: 3
   resolution: 1
-  clusterResolution: 0.4
-  irradianceBudget: 128
+  clusterResolution: 0.3
+  irradianceBudget: 256
   irradianceQuality: 8192
-  backFaceTolerance: 0.9
+  backFaceTolerance: 1
   isTransparent: 0
   modellingTolerance: 0.04
   systemTag: -1
@@ -19,7 +20,9 @@ LightmapParameters:
   blurRadius: 1
   directLightQuality: 64
   antiAliasingSamples: 8
+  pushoff: 0.01
   bakedLightmapTag: -1
-  pushoff: 0.0001
+  limitLightmapCount: 0
+  maxLightmapCount: 1
   AOQuality: 256
   AOAntiAliasingSamples: 16
